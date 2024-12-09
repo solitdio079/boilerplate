@@ -1,10 +1,30 @@
+//import { useEffect } from "react"
 import Footer from "../components/footer"
+import { userContext } from "../utils/contexts"
 import Navbar from "../components/navbar"
-import { Outlet } from "react-router-dom"
+import { Outlet, useLoaderData } from "react-router-dom"
+import {url} from '../utils/serverUrl'
+export async function loader() {
+    try {
+        const req = await fetch(url + "/auth/login/status", {
+            method: 'GET',
+            credentials: 'include',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const response = await req.json()
+        return response
+    } catch (error) {
+        return {error: error.message}
+    }
+}
 export default function Root() {
-    return (<>
+    const user = useLoaderData()
+    return (<userContext.Provider value={user}>
         <Navbar />
         <Outlet/>
         <Footer/>
-    </>)
+    </userContext.Provider>)
 }
