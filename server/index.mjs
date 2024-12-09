@@ -31,13 +31,19 @@ try {
 const app = express()
 // Socket.io connection
 const server = createServer(app)
-const io = new Server(server)
+const io = new Server(server, {
+  cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
+})
 const connections = []
 io.on("connection", (socket) => {
   connections.push(socket)
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("user disconnected")
   })
+})
+app.use((req, res, next) => {
+  req.io = io
+  next()
 })
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -59,6 +65,7 @@ app.use(passport.session())
 const port = process.env.PORT
 
 app.use('/auth', authRouter)
+app.use('/tweets', tweetsRouter)
 app.get('/', (req, res) => {
   res.send('Here is the Home Page')
 })
