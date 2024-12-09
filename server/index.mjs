@@ -1,17 +1,21 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import 'dotenv/config'
-
+// imports needed for auth
 import passport from 'passport'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+// Socket.io imports
+import {createServer} from 'node:http'
+import { Server } from 'socket.io'
 // Routers
 import authRouter from './routes/auth.mjs'
+import tweetsRouter from './routes/tweets.mjs'
 
 const corsOptions = {
-  origin: ['https://bysolitdio.net', 'https://www.bysolitdio.net'],
+  origin: ['http://localhost:5173'],
 
   //credentials: true,
   optionsSuccessStatus: 200,
@@ -25,6 +29,16 @@ try {
   console.log('Error occured')
 }
 const app = express()
+// Socket.io connection
+const server = createServer(app)
+const io = new Server(server)
+const connections = []
+io.on("connection", (socket) => {
+  connections.push(socket)
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  })
+})
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser('yes'))
@@ -49,6 +63,6 @@ app.get('/', (req, res) => {
   res.send('Here is the Home Page')
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server listening to port: ${port}`)
 })

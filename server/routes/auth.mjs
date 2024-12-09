@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport'
-import '../steategies/magicLink.mjs'
+import '../strategies/magicLink.mjs'
 
 const router = Router()
 
