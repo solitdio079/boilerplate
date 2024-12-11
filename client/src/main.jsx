@@ -5,8 +5,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root, {loader as rootLoader} from './routes/root'
 import ErrorPage from './error-page'
 import Login, {action as loginAction} from './routes/login'
-import Tweets, {action as sendTweetAction} from './routes/tweets'
-
+import Tweets, {action as sendTweetAction, loader as tweetLoader} from './routes/tweets'
+import {loader as initialTweetLoader} from './routes/loaders/initialTweetsLoader'
+import AdminRoot from './routes/admin/adminRoot'
 
 const router = createBrowserRouter([
   {
@@ -21,13 +22,28 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         action: loginAction,
       },
+      {
+        path: "/admin",
+        element: <AdminRoot />,
+        errorElement: <ErrorPage/>
+      }
     ],
+  },
+  {
+    path: "/loaders",
+    children: [
+      {
+        path: "/loaders/initialtweets",
+        loader: initialTweetLoader
+      }
+    ]
   },
   {
     path: '/tweets',
     element: <Tweets />,
     errorElement: <ErrorPage />,
-    action: sendTweetAction
+    action: sendTweetAction,
+    loader: tweetLoader
   },
 ])
 

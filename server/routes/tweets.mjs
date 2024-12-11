@@ -34,7 +34,8 @@ router.get("/", async (req, res) => {
     }
 
     try {
-        const lasTweets = await Tweets.find(query, null, { sort: -1, limit: 5 })
+        const lasTweets = await Tweets.find(query, null, { sort: {_id: -1}, limit: 5 })
+        //console.log(lasTweets);
         return res.send(lasTweets)
     } catch (error) {
         return {error: error.message}

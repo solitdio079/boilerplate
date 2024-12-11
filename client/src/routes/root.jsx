@@ -15,6 +15,7 @@ export async function loader() {
             }
         })
         const response = await req.json()
+        if(response.error) return null
         return response
     } catch (error) {
         return {error: error.message}
@@ -23,7 +24,7 @@ export async function loader() {
 export default function Root() {
     const user = useLoaderData()
     return (<userContext.Provider value={user}>
-        <Navbar />
+        <Navbar user={user} />
         <Outlet/>
         <Footer/>
     </userContext.Provider>)

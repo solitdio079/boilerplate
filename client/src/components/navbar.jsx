@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import { Link,NavLink } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({user}) {
     return (
       <>
         <div className="navbar bg-base-100">
@@ -31,10 +33,14 @@ export default function Navbar() {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <Link to="/login">Login</Link>
+                  {user ? (
+                    <NavLink to="/admin">Admin</NavLink>
+                  ) : (
+                    <NavLink to="/login">Login</NavLink>
+                  )}
                 </li>
                 <li>
-                  <Link to="/tweets">Tweets</Link>
+                  <NavLink to="/tweets">Tweets</NavLink>
                 </li>
                 <li>
                   <a>Item 3</a>
@@ -46,10 +52,14 @@ export default function Navbar() {
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
-                <Link to="/login">Login</Link>
+                {user ? (
+                  <NavLink to="/admin">Admin</NavLink>
+                ) : (
+                  <NavLink to="/login">Login</NavLink>
+                )}
               </li>
               <li>
-                <Link to="/tweets">Tweets</Link>
+                <NavLink to="/tweets">Tweets</NavLink>
               </li>
               <li>
                 <a>Item 3</a>

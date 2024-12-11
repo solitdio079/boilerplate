@@ -13,6 +13,7 @@ import { Server } from 'socket.io'
 // Routers
 import authRouter from './routes/auth.mjs'
 import tweetsRouter from './routes/tweets.mjs'
+import usersRouter from './routes/users.mjs'
 
 const corsOptions = {
   origin: ['http://localhost:5173'],
@@ -36,6 +37,7 @@ const io = new Server(server, {
 })
 const connections = []
 io.on("connection", (socket) => {
+  //console.log("user connected")
   connections.push(socket)
   socket.on("disconnect", () => {
     console.log("user disconnected")
@@ -46,6 +48,9 @@ app.use((req, res, next) => {
   next()
 })
 app.use(cors(corsOptions))
+
+app.use('/users', usersRouter)
+
 app.use(express.json())
 app.use(cookieParser('yes'))
 app.use(
