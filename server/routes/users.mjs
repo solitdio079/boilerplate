@@ -26,7 +26,8 @@ const router = Router()
 
 
 
-router.put("/:id", upload.single("picture"),async (req, res) => {
+router.put("/:id", upload.single("picture"), async (req, res) => {
+  //console.log('inside put');
     const { id } = req.params
     const {fullName, email} = req.body
     // Get the user to be updated
@@ -65,6 +66,41 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get("/:id", async(req, res) => {
+  const { id } = req.params
+  
+  try {
+    const singleUser = await Users.findById(id)
+    if (!singleUser) return res.send({ error: 'User not found' })
+    
+    return res.send(singleUser)
+    
+  } catch (error) {
+    return res.send({error: error.message})
+  }
+})
+router.patch("/notifUrl/:id", async(req,res)=> {
+  const { id } = req.params
+  //console.log(req.body)
+  const { notifUrl } = req.body
+    // Get the user to be updated
+     const toBeUpdated = await Users.findById(id)
+  if (!toBeUpdated) return res.send({ error: 'No user found!' })
+   try {
+     const newUser = {
+       fullName: toBeUpdated.fullName,
+       email: toBeUpdated.email,
+       picture: toBeUpdated.picture,
+       notifUrl,
+     }
+     //console.log(newUser)
+     await Users.findByIdAndUpdate(id, newUser)
+     return res.send({ msg: 'User updated with success!' })
+   } catch (error) {
+     return res.send({ error: error.message })
+   }
+    
+})
 router.patch("/:id", async (req, res) => {
      const { id } = req.params
      const { fullName, email } = req.body

@@ -43,6 +43,7 @@ io.on("connection", (socket) => {
     console.log("user disconnected")
   })
 })
+app.use(express.static('public'))
 app.use((req, res, next) => {
   req.io = io
   next()

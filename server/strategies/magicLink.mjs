@@ -56,12 +56,24 @@ passport.use(
 )
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
+    if (user.notifUrl) {
+        cb(null, {
+         _id: user._id,
+         email: user.email,
+         fullName: user.fullName,
+         notifUrl: user.notifUrl.endpoint,
+        })
+      return 
+    }
     cb(null, user)
+     
   })
+    
 })
 
 passport.deserializeUser(function (user, cb) {
   process.nextTick(function () {
+    //console.log(user)
     return cb(null, user)
   })
 })

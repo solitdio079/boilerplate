@@ -43,6 +43,7 @@ export async function action({ request }) {
       body: JSON.stringify(bodyObj),
     })
     const response = await req.json()
+    if(response.msg) 
     return response
   } catch (error) {
     return { error: error.message }
@@ -52,7 +53,7 @@ export async function action({ request }) {
 
 export default function Tweets() {
     const fetcher = useFetcher()
-  const socket = io('http://localhost:5500')
+  const socket = io(url)
    const [cursor, setCursor] = useState(null)
    const [hasMore, setHasMore] = useState(true)
 
@@ -81,7 +82,7 @@ export default function Tweets() {
       socket.on('disconnect', () => {
         console.log(socket.id)
       })
-    }, [socket, fetcher.data])
+    }, [socket, fetcher.data,tweets])
 
   const fetchMoreData = async () => {
     try {
@@ -103,9 +104,9 @@ export default function Tweets() {
   
   
     const sorted = Array.from(new Set(tweets.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-    console.log(sorted)
+    //console.log(sorted)
     return (
-      <div className="flex flex-col lg:flex-row w-full">
+      <div className="flex flex-col-reverse lg:flex-row w-full">
         <div className="flex-col p-5 w-full lg:h-screen lg:w-1/5 lg:sticky lg:top-0">
           <div className="avatar">
             <div className="w-12 rounded-full">

@@ -16,7 +16,7 @@ router.post(
     failureMessage: 'Email Not Sent',
   }),
   (req, res) => {
-    res.send({ msg: 'Email sent!' })
+   return res.send({ msg: 'Email sent!' })
   }
 )
 
